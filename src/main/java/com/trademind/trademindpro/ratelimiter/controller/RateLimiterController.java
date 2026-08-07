@@ -4,6 +4,7 @@ import com.trademind.trademindpro.ratelimiter.service.RedisRateLimiter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/api/rate-limit")
@@ -16,9 +17,15 @@ public class RateLimiterController {
     }
 
     @PostMapping("/{clientId}")
-    public ResponseEntity<String> allowRequest(@PathVariable String clientId) {
+    public ResponseEntity<String> allowRequest(
+        @PathVariable String clientId,
+        HttpServletRequest request) {
 
-        boolean allowed = redisRateLimiter.allowRequest(clientId);
+        String ip = request.getRemoteAddr();
+
+        String endpoint = request.getRequestURI();
+
+        boolean allowed = redisRateLimiter.allowRequest(clientId, ip, endpoint);
 
         if (allowed) {
             return ResponseEntity.ok("Request Allowed");

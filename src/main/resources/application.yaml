@@ -1,3 +1,33 @@
 spring:
   application:
     name: TradeMind-Pro
+
+  datasource:
+    url: jdbc:h2:mem:trademind;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      timeout: 60000
+
+rate-limit:
+  client:
+    limit: 5
+    window: 60
+
+  ip:
+    limit: 20
+    window: 60
+
+  endpoint:
+    limit: 100
+    window: 60  
